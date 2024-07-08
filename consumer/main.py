@@ -24,14 +24,13 @@ except Exception as e:
     print(e)
 
 
-# consumer = KafkaConsumer('events', bootstrap_servers=os.getenv("KAFKA_BOOTSTRAP_SERVERS"), value_deserializer=lambda v: json.loads(v.decode('utf-8')))
 consumer = KafkaConsumer(
     'events',
     bootstrap_servers=os.getenv("KAFKA_BOOTSTRAP_SERVERS"),
     value_deserializer=lambda v: json.loads(v.decode('utf-8')),
     auto_offset_reset='earliest',  # Start reading from the earliest offset
-    enable_auto_commit=True,  # Automatically commit offsets
-    group_id='my-consumer-group'  # Consumer group ID
+    enable_auto_commit=True,  
+    group_id='my-consumer-group'  
 )
 
 
@@ -46,7 +45,7 @@ consumer = KafkaConsumer(
 try:
    for message in consumer:
     event = message.value
-    event['timestamp'] = datetime.strptime(event['timestamp'], '%Y-%m-%dT%H:%M:%S.%f')  # Example format adjustment
+    event['timestamp'] = datetime.strptime(event['timestamp'], '%Y-%m-%dT%H:%M:%S.%f')  
     events_collection.insert_one(event)
     print(f"Inserted event: {event}")
 except Exception as e:

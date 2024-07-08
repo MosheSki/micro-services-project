@@ -19,8 +19,12 @@ mongo_db = mongo_client["event_db"]
 mongo_collection = mongo_db["events"]
 
 # Redis connection setup
-redis_client = redis.StrictRedis(host='redis', port=config["redis_port"], db=config["redis_db"])
-   
+try:
+    redis_client = redis.StrictRedis(host='redis', port=config["redis_port"], db=config["redis_db"])
+    redis_client.ping()
+    print("Connected to Redis successfully!")
+except Exception as e:
+    print(f"Error connecting to Redis: {e}")
 
 # Function to convert MongoDB document to JSON serializable format
 def convert_doc(doc):
